@@ -60,34 +60,16 @@ def upload_zip():
         working_folder = os.path.join(TEMP_DIR, file.filename[:-4])
 
         chunks = []
-        for filename in os.listdir(working_folder):
-            match filename:
-                case "model.py":
-                    pass
-                case "requirements.txt":
-                    pass
-                case _:
-                    chunks.append(os.path.join(TEMP_DIR, file.filename[:-4], filename))
+        for filename in os.listdir(working_folder+'/data'):
+                chunks.append(filename)
 
-        with open(working_folder+'/model.py', 'r') as modelFile:
-            with open(working_folder+'/requirements.txt', 'r') as reqFile:
-                for worker in workers:
-                    with zipfile.ZipFile(os.path.join(TEMP_DIR, worker+'.zip'), 'w') as worker_zip:
-                        for chunk in os.listdir(working_folder):
-                            match filename:
-                                case "model.py":
-                                    pass
-                                case "requirements.txt":
-                                    pass
-                                case _:
-                                    # chunks.append(os.path.join(TEMP_DIR, file.filename[:-4], filename))
-                                    with open(working_folder + 'chunk.py', 'r') as chunkFile:
-                                        worker_zip.write(chunkFile)
+        for worker, chunk in zip(workers, chunks):
+            with zipfile.ZipFile(os.path.join(TEMP_DIR, worker+'.zip'), 'w') as worker_zip:
+                worker_zip.write(working_folder+'/model.py', arcname='model.py')
+                worker_zip.write(working_folder+'/requirements.txt', arcname='requirements.txt')
+                worker_zip.write(working_folder+'/data/'+chunk, arcname='/data/'+chunk)
 
-        socketio.emit('chunk-upload', worker, room=workers)
-            # with open(os.path.join(TEMP_DIR, file.filename), 'rb') as worker_zip:
-            #     worker_zip_base64 = base64.b64encode(worker_zip.read())
-            #     socketio.emit('chunk-upload', worker_zip_base64, room=worker)
+            socketio.emit('chunk-upload', worker+f'_{chunk}', room=workers)
         
         return 'Upload zip successful', 200
 
