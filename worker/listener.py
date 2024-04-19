@@ -16,17 +16,18 @@ hb = Thread(target=heartbeat)
 import requests
 
 def downloadData(token):
-    # print(data)
+    print(token)
     respdata = requests.get(f"http://172.16.129.26:5000/download/{token}").content
-    print(respdata)
-    # with open('worker.zip', 'wb') as f:
-    #     f.write(respdata)
+    # print(respdata)
+    with open('worker.zip', 'wb') as f:
+        f.write(respdata)
 
 sio = socketio.Client()
 
 @sio.event
 def connect():
-    hb.start()
+    if hb.is_alive() == False:
+        hb.start()
     print("I'm connected!")
 
 @sio.event
