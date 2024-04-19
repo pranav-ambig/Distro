@@ -5,19 +5,28 @@ import socketio
 workers=[]
 
 from threading import Thread
+import time
+def heartbeat():
+    while True:
+        sio.emit('heartbeat',"I'm alive")
+        time.sleep(10)
+        
+hb = Thread(target=heartbeat)
 
-import base64
+import requests
 
-def decodeData(data):
+def downloadData(token):
     # print(data)
-    bindata = base64.b64decode(data)
-    with open('worker.zip', 'wb') as f:
-        f.write(bindata)
+    respdata = requests.get(f"http://172.16.129.26:5000/download/{token}").content
+    print(respdata)
+    # with open('worker.zip', 'wb') as f:
+    #     f.write(respdata)
 
 sio = socketio.Client()
 
 @sio.event
 def connect():
+    hb.start()
     print("I'm connected!")
 
 @sio.event
@@ -25,9 +34,9 @@ def disconnect():
     print("I'm disconnected!")
 
 @sio.on('chunk-upload')
-def on_message(data):
+def on_message(token):
     print('I received a message!')
-    decodeData(data)
+    downloadData(token)
     spin_up()
 
 try:
