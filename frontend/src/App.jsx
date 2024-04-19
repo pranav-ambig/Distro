@@ -2,6 +2,8 @@ import { useState } from 'react'
 import React from 'react';
 import { Routes, Route } from 'react-router-dom'
 import './App.css'
+import './output.css';
+
 import NavBar from './components/NavBar'
 import HomePage from './components/HomePage'
 import AboutPage from './components/AboutPage'
@@ -9,6 +11,7 @@ import ContactPage from './components/ContactPage'
 
 function App() {
   const [count, setCount] = useState(0)
+
 
   return (
     <div>

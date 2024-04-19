@@ -37,6 +37,9 @@ def spin_up():
       shutil.rmtree("Contents/")
       
     extract_zip_file(zip_file_path, extract_path)
+    print("done extracting")
     rename_chunks()
+    print("done renaming")
     create_worker_instance()
+    print("done creating worker instance")
     
