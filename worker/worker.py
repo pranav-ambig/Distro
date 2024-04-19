@@ -2,6 +2,7 @@ import zipfile
 import subprocess
 import os
 import re
+import shutil
 
 def extract_zip_file(zip_file_path, extract_path):
     with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
@@ -19,8 +20,9 @@ def rename_chunks(directory="Contents/", prefix="chunk", extension=".csv"):
     if match:
       old_file_path = os.path.join(directory, filename)
       new_number = match.group(1)  # Extract the captured number
-      new_file_name = (directory + f"/{prefix}{extension}")
-      print(new_file_name)
+      new_file_name = (directory + f"{prefix}{extension}")
+      
+  
       os.rename(old_file_path, new_file_name)
 
 def create_worker_instance():
@@ -29,6 +31,11 @@ def create_worker_instance():
     subprocess.run(["docker", "run", "worker1"])
     
 def spin_up():
+    # Check if the folder exists
+    if os.path.exists("Contents/"):
+      # Delete the folder and its contents
+      shutil.rmtree("Contents/")
+      
     extract_zip_file(zip_file_path, extract_path)
     rename_chunks()
     create_worker_instance()
