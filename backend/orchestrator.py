@@ -26,11 +26,14 @@ import time,threading
 def check_hbs():
     while True:
         print(timestamp_dict)
+        keys_to_remove = []
         for key in timestamp_dict:
             if time.time() - timestamp_dict[key] > 30:
                 print(f"Worker {key} is dead")
-                workers.remove(key)
-        time.sleep(30)
+                keys_to_remove.append(key)
+        for key in keys_to_remove:
+            del timestamp_dict[key]
+        time.sleep(20)
 
 threading.Thread(target=check_hbs).start()
 
