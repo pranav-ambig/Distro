@@ -10,9 +10,9 @@ def extract_zip_file(zip_file_path, extract_path):
 # Example usage
 zip_file_path = 'worker.zip'
 extract_path = 'Contents/'
-# Contents contains job.py chunks.zip
 
-def rename_chunks(directory="Contents/worker/data", prefix="chunk", extension=".csv"):
+
+def rename_chunks(directory="Contents/", prefix="chunk", extension=".csv"):
 
   for filename in os.listdir(directory):
     match = re.search(rf"{prefix}(\d+){extension}", filename)

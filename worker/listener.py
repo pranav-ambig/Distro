@@ -1,50 +1,38 @@
-import socket
+
 
 from worker import spin_up
 
-# Define the IP address and port number for the worker node
-worker_ip = 'http://172.16.129.26'
-worker_port = 5000
-
-# Create a socket object
-worker_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-# Bind the socket to the IP address and port number
-worker_socket.bind((worker_ip, worker_port))
-
-# Listen for incoming connections
-worker_socket.listen()
-
-print(f"Worker node is listening on {worker_ip}:{worker_port}")
-
+import socketio
 
 workers=[]
 
 from threading import Thread
 
-while True:
-    # Accept a connection from the orchestrator
-    orchestrator_socket, orchestrator_address = worker_socket.accept()
-    print(f"Connected to orchestrator at {orchestrator_address}")
 
-    # Receive data from the orchestrator
-    data = orchestrator_socket.recv(1024).decode()
-    print(f"Received message from orchestrator: {data}")
+import base64
 
-    # spawn function calls here
-    wrkr = Thread(target=spin_up)
-    wrkr.start()
-    workers.append(wrkr)
+def decodeData(data):
+    bindata = base64.b64decode(data[0])
+    with open('worker.zip', 'wb') as f:
+        f.write(bindata)
     
-    # Process the received data
 
-    # Send a response back to the orchestrator
-    response = "Message received"
-    orchestrator_socket.send(response.encode())
+# standard Python
+with socketio.SimpleClient() as sio:
+    # ... connect to a server and use the client
+    # ... no need to manually disconnect!
+    sio.connect('http://172.16.129.26:5000')
+    event = sio.receive()
+    print(f'received event: "{event[0]}" with arguments {event[1:]}')
+    decodeData(event[1:])
 
-    # Close the connection with the orchestrator
-    orchestrator_socket.close()
-    break
+
+
+# spawn function calls here
+wrkr = Thread(target=spin_up)
+wrkr.start()
+workers.append(wrkr)
+
 
 for wrkr in workers:
     wrkr.join()
