@@ -21,7 +21,7 @@ TEMP_DIR = './temp'
 
 
 # Global Variables
-workers = []
+workers = set()
 
 @app.route('/')
 def hello_world():
@@ -29,8 +29,17 @@ def hello_world():
 
 @socketio.on('connect')
 def handle_connect():
-    workers.append(request.sid)
-    print("Worker connected")
+    workers.add(request.sid)
+    print(len(workers), "Workers connected")
+
+@socketio.on('heartbeat')
+def handle_hb(msg):
+    print(f"Heartbeat from {request.sid}:{msg}")
+
+@socketio.on('disconnect')
+def handle_connect():
+    workers.remove(request.sid)
+    print(len(workers), "Workers connected")
 
 @app.route('/download/<filename>', methods=['GET'])
 def serveWorkerZips(filename):
@@ -69,7 +78,7 @@ def upload_zip():
                 worker_zip.write(working_folder+'/requirements.txt', arcname='requirements.txt')
                 worker_zip.write(working_folder+'/data/'+chunk, arcname='/data/'+chunk)
 
-            socketio.emit('chunk-upload', worker+f'_{chunk}', room=workers)
+            socketio.emit('chunk-upload', worker, room=list(workers))
         
         return 'Upload zip successful', 200
 
