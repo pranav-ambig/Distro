@@ -23,8 +23,8 @@ def get_num_correct(preds, labels):
 
 # Read in the train set and the test set
 # In a kernel here on Kaggle, use the Workspace on the right-hand side to figure out the file path
-train_set = pd.read_csv("./data/train.csv")
-test_images = pd.read_csv("./data/test.csv")
+train_set = pd.read_csv("./data/chunk.csv")
+# test_images = pd.read_csv("./data/test.csv")
 
 # Split the train set so there is also a validation set
 train_images, val_images, train_labels, val_labels = train_test_split(train_set.iloc[:, 1:], 
@@ -128,7 +128,7 @@ class MNISTDataSet(torch.utils.data.Dataset):
     # Get datasets using the custom MNIST Dataset for the train, val, and test images
 train_set = MNISTDataSet(train_images, train_labels, train_trans)
 val_set = MNISTDataSet(val_images, val_labels, val_trans)
-test_set = MNISTDataSet(test_images, None, val_trans)
+# test_set = MNISTDataSet(test_images, None, val_trans)
 
 # Nice habit to get into
 num_classes = 10 # 0-9
@@ -233,47 +233,47 @@ for epoch in range(epochs):
 t2 = time.time()
 print(f"It took {t2-t1} seconds.")
 
-# Use the validation set to make a confusion matrix
-network.eval() # good habit I suppose
-predictions = torch.LongTensor().to(device) # Tensor for all predictions
+# # Use the validation set to make a confusion matrix
+# network.eval() # good habit I suppose
+# predictions = torch.LongTensor().to(device) # Tensor for all predictions
 
-# Goes through the val set
-# Don't care about the associated labels
-for images, _ in val_dl:
-    preds = network(images.to(device))
-    predictions = torch.cat((predictions, preds.argmax(dim=1)), dim=0)
+# # Goes through the val set
+# # Don't care about the associated labels
+# for images, _ in val_dl:
+#     preds = network(images.to(device))
+#     predictions = torch.cat((predictions, preds.argmax(dim=1)), dim=0)
 
-# Make the confusion matrix
-cmt = torch.zeros(num_classes, num_classes, dtype=torch.int32)
-for i in range(len(val_labels)):
-    cmt[val_labels[i], predictions[i]] += 1
+# # Make the confusion matrix
+# cmt = torch.zeros(num_classes, num_classes, dtype=torch.int32)
+# for i in range(len(val_labels)):
+#     cmt[val_labels[i], predictions[i]] += 1
 
 
-# Doesn't look fancy but it works
-# Actual class down the column (0-9), predicted class across the rows (0-9)
-print(cmt)
+# # Doesn't look fancy but it works
+# # Actual class down the column (0-9), predicted class across the rows (0-9)
+# print(cmt) 
 
-# Time to get the network's predictions on the test set
-# Put the test set in a DataLoader
-test_dl = DataLoader(test_set, batch_size=batch_size, shuffle=False)
+# # Time to get the network's predictions on the test set
+# # Put the test set in a DataLoader
+# test_dl = DataLoader(test_set, batch_size=batch_size, shuffle=False)
 
-network.eval() # Safety first
-predictions = torch.LongTensor().to(device) # Tensor for all predictions
+# network.eval() # Safety first
+# predictions = torch.LongTensor().to(device) # Tensor for all predictions
 
-# Go through the test set, saving the predictions in... 'predictions'
-for images in test_dl:
-    preds = network(images.to(device))
-    predictions = torch.cat((predictions, preds.argmax(dim=1)), dim=0)
+# # Go through the test set, saving the predictions in... 'predictions'
+# for images in test_dl:
+#     preds = network(images.to(device))
+#     predictions = torch.cat((predictions, preds.argmax(dim=1)), dim=0)
     
-# Read in the sample submission
-submission = pd.read_csv("./data/sample_submission.csv")
+# # Read in the sample submission
+# submission = pd.read_csv("./data/sample_submission.csv")
 
-# Change the label column to our predictions 
-# Have to make sure the predictions Tensor is on the cpu
-submission['Label'] = predictions.cpu().numpy()
+# # Change the label column to our predictions 
+# # Have to make sure the predictions Tensor is on the cpu
+# submission['Label'] = predictions.cpu().numpy()
 
-# Write the dataframe to a new csv, not including the index
-submission.to_csv("predictions.csv", index=False)
+# # Write the dataframe to a new csv, not including the index
+# submission.to_csv("predictions.csv", index=False)
 
 # Save the model (if you really want for some reason)
 # torch.save(network, "Model/mnist_network") 
