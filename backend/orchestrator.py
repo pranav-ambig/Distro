@@ -20,12 +20,13 @@ logging.basicConfig(level=logging.ERROR)
 TEMP_DIR = './temp'
 
 timestamp_dict={}
+checkpoint_dict={}
 
 import time,threading
 
 def check_hbs():
     while True:
-        print(timestamp_dict)
+        print(checkpoint_dict)
         keys_to_remove = []
         for key in timestamp_dict:
             if time.time() - timestamp_dict[key] > 30:
@@ -33,6 +34,7 @@ def check_hbs():
                 keys_to_remove.append(key)
         for key in keys_to_remove:
             del timestamp_dict[key]
+            del checkpoint_dict[key]
         time.sleep(20)
 
 threading.Thread(target=check_hbs).start()
@@ -51,8 +53,9 @@ def handle_connect():
 
 @socketio.on('heartbeat')
 def handle_hb(msg):
-    print(f"Heartbeat from {request.sid}:{msg}")
+    print(f"Heartbeat from {request.sid}:Epochs = {msg}")
     timestamp_dict[request.sid] = time.time()
+    checkpoint_dict[request.sid] = msg
 
 @socketio.on('disconnect')
 def handle_connect():

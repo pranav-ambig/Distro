@@ -6,10 +6,24 @@ workers=[]
 
 from threading import Thread
 import time
+import json
+
+def read_checkpoint():
+            with open('Contents/checkpoint.json', 'r') as file:
+                data = json.load(file)
+            return data
+        
 def heartbeat():
     while True:
-        sio.emit('heartbeat',"I'm alive")
-        time.sleep(10)
+        
+        # Call the function to read data from JSON
+        data = read_checkpoint()
+        # Use the data as needed
+        if "Completed epochs" not in data:
+            sio.emit('heartbeat',0)
+        else:
+            sio.emit('heartbeat',data["Completed epochs"])
+            time.sleep(10)
         
 hb = Thread(target=heartbeat)
 

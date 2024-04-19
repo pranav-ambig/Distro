@@ -16,6 +16,15 @@ from sklearn.model_selection import train_test_split
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 print(device)
 
+## INJECTED PART ##
+def write_checkpoint(epno ):
+    
+    with open("checkpoint.json", 'w') as file:
+        json.dump({"Completed epochs" : epno}, file)
+
+## END OF INJECTED PART ##
+
+
 # Quick function that gets how many out of 'preds' match 'labels'
 # To be used much later
 def get_num_correct(preds, labels):
@@ -185,9 +194,15 @@ val_dl = DataLoader(val_set, batch_size=batch_size, shuffle=False)
 optimizer = optim.Adam(network.parameters(), lr=lr)
 
 import time
+import json
 
 t1 = time.time()
 for epoch in range(epochs):
+    
+    ## INJECTED PART ##
+    write_checkpoint(epoch+1)
+    ## END OF INJECTED PART ##
+    
     print("Epoch: ", epoch+1)
     epoch_loss = 0
     epoch_correct = 0
