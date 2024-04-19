@@ -3,6 +3,6 @@
 import requests
 
 url = 'http://localhost:5000/upload-zip'
-files = {'file': open('example2.zip', 'rb')}
+files = {'file': open('temp3.zip', 'rb')}
 response = requests.post(url, files=files)
 print(response.text)
