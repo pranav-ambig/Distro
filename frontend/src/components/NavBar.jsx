@@ -1,14 +1,16 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React from 'react';
+import { Link } from 'react-router-dom';
+import img from '../assets/distro.png';
 
 const NavBar = () => {
   return (
-    <div className="m-0 p-0">
-      <Link className="m-0 p-0" to="/">Home</Link>
-      <Link className="m-0 p-0" to="/about">About</Link>
-      <Link className="m-0 p-0" to="/contact">Contact</Link>
+    <div className="top-0 w-full bg-gray-200 text-black p-4 flex items-center">
+        <img src={img} alt="Logo" className="h-20 w-20 ml-10 mr-10 " />
+        <Link to="/" className="text-lg font-bold mr-10 mb-4">Home</Link>
+        <Link to="/about" className="hover:text-gray-700 mr-10 mb-4 font-bold">About</Link>
+        <Link to="/contact" className="hover:text-gray-700 mr-10 mb-4 font-bold">Contact</Link>
     </div>
-  )
-}
+  );
+};
 
-export default NavBar
+export default NavBar;
