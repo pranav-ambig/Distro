@@ -6,7 +6,7 @@ def extract_zip_file(zip_file_path, extract_path):
         zip_ref.extractall(extract_path)
 
 # Example usage
-zip_file_path = 'master.zip'
+zip_file_path = 'worker.zip'
 extract_path = 'Contents/'
 # Contents contains job.py chunks.zip
 extract_zip_file(zip_file_path, extract_path)
