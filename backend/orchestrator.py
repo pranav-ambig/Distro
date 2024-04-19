@@ -19,6 +19,20 @@ logging.basicConfig(level=logging.ERROR)
 # Constants
 TEMP_DIR = './temp'
 
+timestamp_dict={}
+
+import time,threading
+
+def check_hbs():
+    while True:
+        print(timestamp_dict)
+        for key in timestamp_dict:
+            if time.time() - timestamp_dict[key] > 30:
+                print(f"Worker {key} is dead")
+                workers.remove(key)
+        time.sleep(30)
+
+threading.Thread(target=check_hbs).start()
 
 # Global Variables
 workers = set()
@@ -35,6 +49,7 @@ def handle_connect():
 @socketio.on('heartbeat')
 def handle_hb(msg):
     print(f"Heartbeat from {request.sid}:{msg}")
+    timestamp_dict[request.sid] = time.time()
 
 @socketio.on('disconnect')
 def handle_connect():
