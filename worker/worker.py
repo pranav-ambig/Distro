@@ -33,24 +33,15 @@ def rename_chunks(directory="Contents/", prefix="chunk", extension=".csv"):
 
 import os
 
-
+import time
 def create_worker_instance():
 
     subprocess.run(["docker",  "image", "build", "-t", "worker1", "."])
-    
-    
-        
-    # Get the current working directory
-    cwd = os.getcwd()
-
-    # Specify the relative directory
-    relative_dir = './'
-
-    # Join the current working directory with the relative directory
-    host_dir = os.path.join(cwd, relative_dir)
 
     # Run the docker command
-    subprocess.run(["docker", "run", "-v", f"{host_dir}:/", "worker1"])
+    subprocess.run(["docker", "run", "worker1"])
+    time.sleep(10)
+    subprocess.run(["docker", "cp" , "worker1:/Contents/checkpoint.json" , "."])
     
 def spin_up():
     # Check if the folder exists
