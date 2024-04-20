@@ -70,10 +70,13 @@ def handle_connect():
     workers.remove(request.sid)
     print(len(workers), "Workers connected")
 
-
+accarr=[0, 0, 0, 0, 0, 0, 0]
 @app.route('/getaccuracyarray', methods=['GET'])
 def getaccuracyarray():
-    return [65, 59, 80, 81, 56, 55, 40]
+    
+    return accarr
+
+
 
 
 @socketio.on('heartbeat')
@@ -82,10 +85,18 @@ def handle_hb(msg):
     timestamp_dict[request.sid] = time.time()
     checkpoint_dict[request.sid] = msg
 
+i=0
 
 @socketio.on('checkpoint')
 def handle_checkpoint(checkpoint):
+    global i,accarr
     checkpoints.append(checkpoint)
+    accarr[i]=checkpoint["Accuracy"]
+    if i==len(accarr):
+        return
+    i+=1
+    
+        
 
 
 
