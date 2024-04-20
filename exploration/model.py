@@ -12,6 +12,14 @@ import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
+import sys
+import socketio
+
+
+sio = socketio.Client()
+
+sio.connect('http://172.16.129.26:5000')
+
 # Gets the GPU if there is one, otherwise the cpu
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 print(device)
@@ -19,6 +27,7 @@ print(device)
 ## INJECTED PART ##
 def write_checkpoint(epno ):
     
+    sio.emit("checkpoint" , {"container_key" : sys.argv[1] ,"Completed epochs": epno })
     with open("checkpoint.json", 'w') as file:
         json.dump({"Completed epochs" : epno}, file)
 

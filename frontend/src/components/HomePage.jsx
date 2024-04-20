@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function HomePage() {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -14,9 +16,9 @@ function HomePage() {
 
     try {
       const response = await axios.post('http://172.16.129.26:5000/upload-zip', formData);
-      console.log('File uploaded successfully');
+      toast.success('File uploaded successfully');
     } catch (error) {
-      console.error('File upload failed', error);
+      toast.error('File upload failed');
     }
   };
 
@@ -32,6 +34,7 @@ function HomePage() {
 
   return (
     <div className="flex flex-col justify-center items-center h-screen">
+      <ToastContainer />
       <h1 className="text-6xl font-bold mb-10">DISTRO</h1>
       <div className="flex items-center mt-4 mb-10">
         <p className="text-xl text-blue-500 mr-4">To download Chunk Splitter</p>

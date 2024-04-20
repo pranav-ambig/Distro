@@ -34,6 +34,8 @@ hb = Thread(target=heartbeat)
 
 import requests
 
+key = "not assigned"
+
 def downloadData(token):
     print(token)
     respdata = requests.get(f"http://172.16.129.26:5000/download/{token}").content
@@ -57,7 +59,15 @@ def disconnect():
 def on_message(token):
     print('I received a message!')
     downloadData(token)
-    spin_up()
+    spin_up(key)
+
+@sio.on('keyEvent')
+def on_message(keyr):
+    global key
+    key = keyr
+    print('I received my key!')
+    # downloadData(token)
+    # spin_up()
 
 try:
     sio.connect('http://172.16.129.26:5000')

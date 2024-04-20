@@ -12,6 +12,9 @@ def extract_zip_file(zip_file_path, extract_path):
 zip_file_path = 'worker.zip'
 extract_path = 'Contents/'
 
+
+
+
 import json
 def write_checkpoint(epno ):
     
@@ -38,15 +41,13 @@ def create_worker_instance():
 
     subprocess.run(["docker",  "image", "build", "-t", "worker1", "."])
 
-    # Run the docker command and capture the output
-    result = subprocess.run(["docker", "run", "-d", "worker1"], capture_output=True, text=True)
-    container_id = result.stdout.strip()
+    # Run the docker command
+    subprocess.run(["docker", "run" , "-e", f"worker_key={key}", "worker1"])
 
-    while True:
-      time.sleep(40)
-      subprocess.run(["docker", "cp" , f"{container_id}:/Contents/checkpoint.json" , "."])
-    
-def spin_up():
+global key  
+  
+def spin_up(keyr):
+    key = keyr
     # Check if the folder exists
     if os.path.exists("Contents/"):
       # Delete the folder and its contents
