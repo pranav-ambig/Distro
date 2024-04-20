@@ -1,5 +1,4 @@
 
 *.pyc
-
 /backend/temp/*
 /worker/Contents

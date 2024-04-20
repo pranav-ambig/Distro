@@ -1,7 +1,6 @@
 import zipfile
 import subprocess
 import os
-import re
 import shutil
 
 def extract_zip_file(zip_file_path, extract_path):
@@ -20,17 +19,16 @@ def write_checkpoint(epno ):
         json.dump({"Completed epochs" : epno}, file)
 
 
-def rename_chunks(directory="Contents/", prefix="chunk", extension=".csv"):
+def rename_chunks(directory="Contents/data/", prefix="chunk", extension=".csv"):
 
   for filename in os.listdir(directory):
-    match = re.search(rf"{prefix}(\d+){extension}", filename)
-    if match:
-      old_file_path = os.path.join(directory, filename)
-      new_number = match.group(1)  # Extract the captured number
-      new_file_name = (directory + f"{prefix}{extension}")
-      
-  
-      os.rename(old_file_path, new_file_name)
+    
+    old_file_path = os.path.join(directory, filename)
+    
+    new_file_name = (directory + f"{prefix}{extension}")
+    
+
+    os.rename(old_file_path, new_file_name)
 
 import os
 
