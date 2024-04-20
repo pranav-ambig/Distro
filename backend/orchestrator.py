@@ -6,10 +6,7 @@ from flask_socketio import SocketIO
 import logging
 import os
 import zipfile
-import base64
 import json
-import pickle
-import torch
 
 app = Flask(__name__)
 CORS(app)
