@@ -1,4 +1,3 @@
-
 # Import Time
 import torch
 import torch.nn as nn
@@ -13,25 +12,32 @@ import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
-import sys
 import socketio
-
 
 sio = socketio.Client()
 
 sio.connect('http://172.16.129.26:5000')
+
+@sio.event
+def connect():
+    # if hb.is_alive() == False:
+    #     hb.start()
+    print("I'm connected!")
+
+@sio.event
+def disconnect():
+    print("I'm disconnected!")
 
 # Gets the GPU if there is one, otherwise the cpu
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 print(device)
 
 ## INJECTED PART ##
-def write_checkpoint(epno ):
+def make_checkpoint(epno ):
     
-    sio.emit("checkpoint" , {"container_key" : sys.argv[1] ,"Completed epochs": epno })
-    with open("checkpoint.json", 'w') as file:
-        json.dump({"Completed epochs" : epno}, file)
-
+    print("Checkpointing at epoch: ", epno)
+    sio.emit("checkpoint" , { "Completed epochs": epno })
+    
 ## END OF INJECTED PART ##
 
 
@@ -210,10 +216,9 @@ t1 = time.time()
 for epoch in range(epochs):
     
     ## INJECTED PART ##
-    write_checkpoint(epoch+1)
+    make_checkpoint(epoch+1)
     ## END OF INJECTED PART ##
-    
-    print("Epoch: ", epoch+1)
+
     epoch_loss = 0
     epoch_correct = 0
     network.train() # training mode
@@ -306,3 +311,5 @@ print(f"It took {t2-t1} seconds.")
 # 99.457% on MNIST test set on Kaggle (top 23%)
 # (same on full training set w/ 15 epochs)
 # 99.385% on a run through, depends on luck to get a bit higher (or maybe full training set, but also luck)
+
+sio.disconnect()
