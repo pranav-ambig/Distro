@@ -8,7 +8,8 @@ import os
 import zipfile
 import base64
 import json
-# import requests
+import pickle
+import torch
 
 app = Flask(__name__)
 CORS(app)
@@ -22,6 +23,9 @@ TEMP_DIR = './temp'
 
 timestamp_dict={}
 checkpoint_dict={}
+
+
+checkpoints = []
 
 import time,multiprocessing
 
@@ -48,30 +52,25 @@ def check_hbs():
 
 # Global Variables
 workers = set()
-active_workers = 0
-worker_pool_size = 0
 
 @app.route('/')
 def hello_world():
     return 'Hello, World!'
 
+@app.route('/getnumworkers')
+def get_num_workers():
+    return str(len(workers))
+
 @socketio.on('connect')
 def handle_connect():
-    global worker_pool_size
     workers.add(request.sid)
-    worker_pool_size += 1
     socketio.emit('keyEvent', request.sid, room=request.sid)
     print(len(workers), "Workers connected")
 
 
 @socketio.on('disconnect')
 def handle_connect():
-    global worker_pool_size
-    if request.sid in workers:
-        workers.remove(request.sid)
-    if request.sid in active_workers:
-        active_workers.remove(request.sid)
-    worker_pool_size -= 1
+    workers.remove(request.sid)
     print(len(workers), "Workers connected")
 
 @socketio.on('heartbeat')
@@ -83,16 +82,26 @@ def handle_hb(msg):
 
 @socketio.on('checkpoint')
 def handle_checkpoint(checkpoint):
-    print(checkpoint['Completed epochs'], checkpoint['weights dict'])
+    checkpoints.append(checkpoint)
 
-@app.route('/getnumworkers', methods=['GET'])
-def numworkers():
-    return str(len(workers))
 
-# @app.route('/getactiveworkers', methods=['GET'])
-# def activeworkers():
-#     global worker_pool_size
-#     return str(worker_pool_size-len(workers))
+@app.route('/status')
+def handle_status():
+    return json.dumps(checkpoints)
+
+
+@app.route('/post-pickle', methods=['POST'])
+def post_pickle():
+    file = request.files['pkl']
+
+    pickle_data = file.read()
+
+    # state_dict = torch.load(pickle_data)
+    # print(type(state_dict))
+    # print(loaded_data)
+
+    return 'Pickle received', 200
+
 
 @app.route('/download/<filename>', methods=['GET'])
 def serveWorkerZips(filename):

@@ -7,7 +7,7 @@ function Health() {
   useEffect(() => {
     const getNumWorkers = async () => {
       try {
-        const response = await axios.get('http://172.16.129.26:5000/getnumworkers');
+        const response = await axios.get('http://172.18.0.1:5000/getnumworkers');
         setNumWorkers(response.data);
       } catch (error) {
         console.error('Failed to fetch number of workers', error);

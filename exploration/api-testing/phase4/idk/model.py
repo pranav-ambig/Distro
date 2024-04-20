@@ -17,7 +17,11 @@ import socketio
 
 sio = socketio.Client()
 
-sio.connect('http://172.16.129.26:5000')
+sio.connect('http://172.18.0.1:5000')
+
+import pickle
+
+
 
 @sio.event
 def connect():
@@ -33,11 +37,24 @@ def disconnect():
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 print(device)
 
+import requests
+
 ## INJECTED PART ##
-def make_checkpoint(epno ,weights):
+def make_checkpoint(epno ,model):
     
     print("Checkpointing at epoch: ", epno)
-    sio.emit("checkpoint" , { "Completed epochs": epno ,"weights dict" : json.dumps(weights)})
+    state_dict = model.state_dict()
+
+    # Specify the file path where you want to save the state_dict
+    file_path = "state_dict.pkl"
+
+    # Write the state_dict to the pickle file
+    with open(file_path, 'wb') as f:
+        pickle.dump(state_dict, f)
+
+    requests.post('http://172.18.0.1:5000/post-pickle', files={'file': open(file_path, 'rb')})
+    
+    sio.emit("checkpoint" , { "Completed epochs": epno })
     
 ## END OF INJECTED PART ##
 
@@ -217,7 +234,8 @@ t1 = time.time()
 for epoch in range(epochs):
     
     ## INJECTED PART ##
-    make_checkpoint(epoch+1,network.state_dict() )
+    if epoch % 2 == 0:
+        make_checkpoint(epoch+1,network )
     ## END OF INJECTED PART ##
 
     epoch_loss = 0

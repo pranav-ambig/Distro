@@ -4,3 +4,4 @@ pandas
 scikit-learn
 python-socketio
 requests
+pickle5

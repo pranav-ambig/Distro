@@ -16,7 +16,7 @@ import socketio
 
 sio = socketio.Client()
 
-sio.connect('http://172.16.129.26:5000')
+sio.connect('http://172.18.0.1:5000')
 
 @sio.event
 def connect():

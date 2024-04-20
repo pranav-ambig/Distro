@@ -27,7 +27,7 @@ input_file = 'data.csv'
 output_dir = 'data'
 
 # Get the number of worker nodes from the endpoint
-response = requests.get('http://172.16.129.26:5000/getnumworkers')
+response = requests.get('http://172.18.0.1:5000/getnumworkers')
 num_files = response.json()  # Assuming the endpoint returns a JSON response
 
 print(num_files)

@@ -19,7 +19,7 @@ import socketio
 
 sio = socketio.Client()
 
-sio.connect('http://172.16.129.26:5000')
+sio.connect('http://172.18.0.1:5000')
 
 # Gets the GPU if there is one, otherwise the cpu
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
