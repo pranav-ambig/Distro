@@ -7,6 +7,7 @@ import logging
 import os
 import zipfile
 import base64
+import json
 # import requests
 
 app = Flask(__name__)
@@ -22,22 +23,28 @@ TEMP_DIR = './temp'
 timestamp_dict={}
 checkpoint_dict={}
 
-import time,threading
+import time,multiprocessing
 
 def check_hbs():
     while True:
-        print(checkpoint_dict)
-        keys_to_remove = []
-        for key in timestamp_dict:
-            if time.time() - timestamp_dict[key] > 30:
-                print(f"Worker {key} is dead")
-                keys_to_remove.append(key)
-        for key in keys_to_remove:
-            del timestamp_dict[key]
-            del checkpoint_dict[key]
-        time.sleep(20)
+        try:
+            print(checkpoint_dict)
+            keys_to_remove = []
+            for key in timestamp_dict:
+                if time.time() - timestamp_dict[key] > 30:
+                    print(f"Worker {key} is dead")
+                    keys_to_remove.append(key)
+            for key in keys_to_remove:
+                del timestamp_dict[key]
+                del checkpoint_dict[key]
 
-threading.Thread(target=check_hbs).start()
+            for _ in range(20):
+                time.sleep(1)
+
+        except KeyboardInterrupt:
+            break
+
+
 
 # Global Variables
 workers = set()
@@ -49,6 +56,7 @@ def hello_world():
 @socketio.on('connect')
 def handle_connect():
     workers.add(request.sid)
+    socketio.emit('keyEvent', request.sid)
     print(len(workers), "Workers connected")
 
 @socketio.on('heartbeat')
@@ -97,12 +105,16 @@ def upload_zip():
         chunks = []
         for filename in os.listdir(working_folder+'/data'):
                 chunks.append(filename)
-
+        
+        # create a blank json file and save it to working_folder
+        with open(working_folder+'/checkpoint.json', 'w') as f:
+            json.dump({"Completed epochs" : 0}, f)
         for worker, chunk in zip(workers, chunks):
             with zipfile.ZipFile(os.path.join(TEMP_DIR, worker+'.zip'), 'w') as worker_zip:
                 worker_zip.write(working_folder+'/model.py', arcname='model.py')
                 worker_zip.write(working_folder+'/requirements.txt', arcname='requirements.txt')
                 worker_zip.write(working_folder+'/data/'+chunk, arcname='/data/'+chunk)
+                worker_zip.write(working_folder+'/checkpoint.json', arcname='checkpoint.json')
 
             socketio.emit('chunk-upload', worker, room=list(workers))
         
@@ -126,4 +138,9 @@ def handle_upload():
         return "No workers available"
 
 if __name__ == '__main__':
+    heartbeatThread = multiprocessing.Process(target=check_hbs)
+
+    heartbeatThread.start()
     socketio.run(app, host='0.0.0.0')
+    
+    heartbeatThread.join()
