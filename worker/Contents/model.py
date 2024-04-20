@@ -37,6 +37,12 @@ def make_checkpoint(epno ):
     
     print("Checkpointing at epoch: ", epno)
     sio.emit("checkpoint" , { "Completed epochs": epno })
+  
+def make_checkpoint(epno ):
+    
+    print("Checkpointing at epoch: ", epno)
+    sio.emit("checkpoint" , { "Completed epochs": epno })
+  
     
 ## END OF INJECTED PART ##
 
