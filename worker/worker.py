@@ -28,7 +28,7 @@ def rename_chunks(directory="Contents/", prefix="chunk", extension=".csv"):
 def create_worker_instance():
 
     subprocess.run(["docker",  "image", "build", "-t", "worker1", "."])
-    subprocess.run(["docker", "run", "worker1"])
+    subprocess.run(["docker", "run","-v", "/:/app" , "worker1"])
     
 def spin_up():
     # Check if the folder exists

@@ -57,6 +57,11 @@ def handle_hb(msg):
     timestamp_dict[request.sid] = time.time()
     checkpoint_dict[request.sid] = msg
 
+@app.route('/getnumworkers', methods=['GET'])
+def numworkers():
+    return str(len(workers))
+
+
 @socketio.on('disconnect')
 def handle_connect():
     workers.remove(request.sid)
