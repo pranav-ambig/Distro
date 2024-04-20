@@ -70,35 +70,41 @@ def handle_connect():
     workers.remove(request.sid)
     print(len(workers), "Workers connected")
 
+accarr=[0, 0, 0, 0, 0, 0, 0]
+@app.route('/getaccuracyarray', methods=['GET'])
+def getaccuracyarray():
+    
+    return accarr
+
+
+
+
 @socketio.on('heartbeat')
 def handle_hb(msg):
     print(f"Heartbeat from {request.sid}:Epochs = {msg}")
     timestamp_dict[request.sid] = time.time()
     checkpoint_dict[request.sid] = msg
 
+i=0
 
 @socketio.on('checkpoint')
 def handle_checkpoint(checkpoint):
+    global i,accarr
     checkpoints.append(checkpoint)
+    accarr[i]=checkpoint["Accuracy"]
+    if i==len(accarr):
+        return
+    i+=1
+    
+        
 
 
-@app.route('/status')
-def handle_status():
-    return json.dumps(checkpoints)
 
 
-@app.route('/post-pickle', methods=['POST'])
-def post_pickle():
-    file = request.files['pkl']
-
-    pickle_data = file.read()
-
-    # state_dict = torch.load(pickle_data)
-    # print(type(state_dict))
-    # print(loaded_data)
-
-    return 'Pickle received', 200
-
+# @app.route('/getactiveworkers', methods=['GET'])
+# def activeworkers():
+#     global worker_pool_size
+#     return str(worker_pool_size-len(workers))
 
 @app.route('/download/<filename>', methods=['GET'])
 def serveWorkerZips(filename):
