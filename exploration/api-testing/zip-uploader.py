@@ -2,7 +2,7 @@
 
 import requests
 
-LOC = 'phase3/godknows.zip'
+LOC = 'phase4/master.zip'
 
 url = 'http://localhost:5000/upload-zip'
 files = {'file': open(LOC, 'rb')}

@@ -56,7 +56,7 @@ def hello_world():
 @socketio.on('connect')
 def handle_connect():
     workers.add(request.sid)
-    socketio.emit('keyEvent', request.sid)
+    socketio.emit('keyEvent', request.sid, room=request.sid)
     print(len(workers), "Workers connected")
 
 @socketio.on('heartbeat')
@@ -116,7 +116,7 @@ def upload_zip():
                 worker_zip.write(working_folder+'/data/'+chunk, arcname='/data/'+chunk)
                 worker_zip.write(working_folder+'/checkpoint.json', arcname='checkpoint.json')
 
-            socketio.emit('chunk-upload', worker, room=list(workers))
+            socketio.emit('chunk-upload', worker, room=worker)
         
         return 'Upload zip successful', 200
 
@@ -142,5 +142,5 @@ if __name__ == '__main__':
 
     heartbeatThread.start()
     socketio.run(app, host='0.0.0.0')
-    
+
     heartbeatThread.join()
