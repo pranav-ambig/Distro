@@ -26,8 +26,9 @@ function Health() {
       <br />
       <br />
       <br />
-      
-      <p>Number of workers: {numWorkers}</p>
+
+      <p>Number of Available workers: {numWorkers}</p>
+      <p>Number of Active workers: {numWorkers}</p>
     </div>
   );
 }

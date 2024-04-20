@@ -566,8 +566,9 @@ video {
   top: 0px;
 }
 
-.mb-0 {
-  margin-bottom: 0px;
+.mx-10 {
+  margin-left: 2.5rem;
+  margin-right: 2.5rem;
 }
 
 .mb-10 {
@@ -584,10 +585,6 @@ video {
 
 .mr-4 {
   margin-right: 1rem;
-}
-
-.mt-0 {
-  margin-top: 0px;
 }
 
 .mt-10 {
@@ -616,6 +613,10 @@ video {
 
 .w-full {
   width: 100%;
+}
+
+.flex-row {
+  flex-direction: row;
 }
 
 .flex-col {
@@ -651,10 +652,6 @@ video {
 
 .p-4 {
   padding: 1rem;
-}
-
-.text-center {
-  text-align: center;
 }
 
 .font-mono {

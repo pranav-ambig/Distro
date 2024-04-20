@@ -11,6 +11,7 @@ COPY Contents/ .
 RUN pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
 RUN pip install -r requirements.txt
 
+
 # Set environment variables
 # ENV worker_key=value1 
 
