@@ -8,17 +8,15 @@ from threading import Thread
 import time
 import json
 
-def write_checkpoint(epno ):
-    
-    with open("Contents/checkpoint.json", 'w') as file:
-        json.dump({"Completed epochs" : epno}, file)
 
-write_checkpoint(0)
 
 def read_checkpoint():
-            with open('Contents/checkpoint.json', 'r') as file:
-                data = json.load(file)
-            return data
+    try:
+        with open('Contents/checkpoint.json', 'r') as file:
+            data = json.load(file)
+        return data
+    except FileNotFoundError:
+        return {"Completed epochs" : 0}
         
 def heartbeat():
     while True:
