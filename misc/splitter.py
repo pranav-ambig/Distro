@@ -1,5 +1,6 @@
 import csv
 import os
+import requests
 
 def split_csv(input_file, output_dir, num_files):
     os.makedirs(output_dir, exist_ok=True)
@@ -24,5 +25,11 @@ def split_csv(input_file, output_dir, num_files):
 
 input_file = 'final_clean_1.csv'
 output_dir = 'output_chunks'
-num_files = 5  
+
+# Get the number of worker nodes from the endpoint
+response = requests.get('http://172.16.129.26:5000/getnumworkers')
+num_files = response.json()  # Assuming the endpoint returns a JSON response
+
+print(num_files)
+
 split_csv(input_file, output_dir, num_files)

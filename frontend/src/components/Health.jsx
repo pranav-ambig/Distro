@@ -18,7 +18,15 @@ function Health() {
   }, []);
 
   return (
-    <div className="text-5xl font-bold mt-100">
+    <div className="text-5xl font-bold mt-10">
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      
       <p>Number of workers: {numWorkers}</p>
     </div>
   );
