@@ -23,8 +23,8 @@ def split_csv(input_file, output_dir, num_files):
                         break
                     writer.writerow(line)
 
-input_file = 'final_clean_1.csv'
-output_dir = 'output_chunks'
+input_file = 'data.csv'
+output_dir = 'data'
 
 # Get the number of worker nodes from the endpoint
 response = requests.get('http://172.16.129.26:5000/getnumworkers')
