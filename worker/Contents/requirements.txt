@@ -2,5 +2,4 @@ matplotlib
 numpy
 pandas
 scikit-learn
-python-socketio
-requests
+socketio
