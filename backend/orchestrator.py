@@ -73,6 +73,9 @@ def handle_connect():
     workers.remove(request.sid)
     print(len(workers), "Workers connected")
 
+
+
+
 @socketio.on('heartbeat')
 def handle_hb(msg):
     print(f"Heartbeat from {request.sid}:Epochs = {msg}")
@@ -85,23 +88,12 @@ def handle_checkpoint(checkpoint):
     checkpoints.append(checkpoint)
 
 
-@app.route('/status')
-def handle_status():
-    return json.dumps(checkpoints)
 
 
-@app.route('/post-pickle', methods=['POST'])
-def post_pickle():
-    file = request.files['pkl']
-
-    pickle_data = file.read()
-
-    # state_dict = torch.load(pickle_data)
-    # print(type(state_dict))
-    # print(loaded_data)
-
-    return 'Pickle received', 200
-
+# @app.route('/getactiveworkers', methods=['GET'])
+# def activeworkers():
+#     global worker_pool_size
+#     return str(worker_pool_size-len(workers))
 
 @app.route('/download/<filename>', methods=['GET'])
 def serveWorkerZips(filename):
