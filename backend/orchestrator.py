@@ -48,6 +48,8 @@ def check_hbs():
 
 # Global Variables
 workers = set()
+active_workers = 0
+worker_pool_size = 0
 
 @app.route('/')
 def hello_world():
@@ -55,8 +57,21 @@ def hello_world():
 
 @socketio.on('connect')
 def handle_connect():
+    global worker_pool_size
     workers.add(request.sid)
+    worker_pool_size += 1
     socketio.emit('keyEvent', request.sid, room=request.sid)
+    print(len(workers), "Workers connected")
+
+
+@socketio.on('disconnect')
+def handle_connect():
+    global worker_pool_size
+    if request.sid in workers:
+        workers.remove(request.sid)
+    if request.sid in active_workers:
+        active_workers.remove(request.sid)
+    worker_pool_size -= 1
     print(len(workers), "Workers connected")
 
 @socketio.on('heartbeat')
@@ -65,15 +80,19 @@ def handle_hb(msg):
     timestamp_dict[request.sid] = time.time()
     checkpoint_dict[request.sid] = msg
 
+
+@socketio.on('checkpoint')
+def handle_checkpoint(checkpoint):
+    print(checkpoint['Completed epochs'], checkpoint['weights dict'])
+
 @app.route('/getnumworkers', methods=['GET'])
 def numworkers():
     return str(len(workers))
 
-
-@socketio.on('disconnect')
-def handle_connect():
-    workers.remove(request.sid)
-    print(len(workers), "Workers connected")
+# @app.route('/getactiveworkers', methods=['GET'])
+# def activeworkers():
+#     global worker_pool_size
+#     return str(worker_pool_size-len(workers))
 
 @app.route('/download/<filename>', methods=['GET'])
 def serveWorkerZips(filename):
