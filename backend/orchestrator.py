@@ -71,6 +71,9 @@ def handle_connect():
     print(len(workers), "Workers connected")
 
 
+@app.route('/getaccuracyarray', methods=['GET'])
+def getaccuracyarray():
+    return [65, 59, 80, 81, 56, 55, 40]
 
 
 @socketio.on('heartbeat')
