@@ -58,6 +58,7 @@ def disconnect():
 def on_message(token):
     print('I received a message!')
     downloadData(token)
+    sio.emit("going-active")
     sio.disconnect()
     spin_up()
 

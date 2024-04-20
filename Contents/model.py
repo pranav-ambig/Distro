@@ -28,6 +28,16 @@ def connect():
 def disconnect():
     print("I'm disconnected!")
 
+@sio.event
+def connect():
+    # if hb.is_alive() == False:
+    #     hb.start()
+    print("I'm connected!")
+
+@sio.event
+def disconnect():
+    print("I'm disconnected!")
+
 # Gets the GPU if there is one, otherwise the cpu
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 print(device)

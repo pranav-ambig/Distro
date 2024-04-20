@@ -10,7 +10,7 @@ const NavBar = () => {
       <Link to="/about" className="hover:text-gray-700 mr-10 font-bold">Docs</Link>
       <Link to="/contact" className="hover:text-gray-700 mr-10 font-bold">Contact</Link>
       <Link to="/health" className="hover:text-gray-700 mr-10 font-bold">Health</Link>
-      <Link to="/status" className="hover:text-gray-700 mr-10 font-bold">Status</Link>
+      {/* <Link to="/status" className="hover:text-gray-700 mr-10 font-bold">Status</Link> */}
     </div>
   );
 };
