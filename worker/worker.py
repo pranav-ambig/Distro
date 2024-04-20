@@ -38,10 +38,13 @@ def create_worker_instance():
 
     subprocess.run(["docker",  "image", "build", "-t", "worker1", "."])
 
-    # Run the docker command
-    subprocess.run(["docker", "run", "worker1"])
-    time.sleep(10)
-    subprocess.run(["docker", "cp" , "worker1:/Contents/checkpoint.json" , "."])
+    # Run the docker command and capture the output
+    result = subprocess.run(["docker", "run", "-d", "worker1"], capture_output=True, text=True)
+    container_id = result.stdout.strip()
+
+    while True:
+      time.sleep(40)
+      subprocess.run(["docker", "cp" , f"{container_id}:/Contents/checkpoint.json" , "."])
     
 def spin_up():
     # Check if the folder exists

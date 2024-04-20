@@ -31,11 +31,17 @@ function HomePage() {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center h-screen mb-500">
+    <div className="flex flex-col justify-center items-center h-screen">
       <h1 className="text-6xl font-bold mb-10">DISTRO</h1>
-      <input type="file" accept=".zip" className="mt-4" onChange={handleFileChange} />
-      <button onClick={handleFileUpload} className="mt-4 p-2 bg-blue-500 text-white">Send</button>
-      <button onClick={handleDownload} className="mt-4 p-2 bg-green-500 text-white">Download splitter.exe</button>
+      <div className="flex items-center mt-4 mb-10">
+        <p className="text-xl text-blue-500 mr-4">To download Chunk Splitter</p>
+        <button onClick={handleDownload} className="p-2 bg-green-500 text-white">Download splitter.exe</button>
+      </div>
+      <div className="flex items-center">
+        <p className="mt-4 text-xl text-blue-500 mr-10">Upload master.zip</p>
+        <input type="file" accept=".zip" className="mt-4" onChange={handleFileChange} />
+        <button onClick={handleFileUpload} className="mt-4 bg-blue-500 text-white ">Send</button>
+      </div>
     </div>
   );
 }
