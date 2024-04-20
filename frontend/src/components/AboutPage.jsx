@@ -26,14 +26,14 @@ master.zip
         </div>
 
         <div className="flex flex-col justify-center items-center mx-10">
-          <h1>model.py</h1>
+          <h1 className="mb-200">model.py</h1>
           <p>Python script that contains the model definition and training code</p>
         </div>
 
-        <div className="flex flex-col justify-center items-center">
+        {/* <div className="flex flex-col justify-center items-center">
           <h1>chunks*.csv</h1>
           <p>CSV files containing the data split into chunks</p>
-        </div>
+        </div> */}
       </div>
     </div>
   )

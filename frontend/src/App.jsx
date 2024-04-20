@@ -9,6 +9,7 @@ import HomePage from './components/HomePage'
 import AboutPage from './components/AboutPage'
 import ContactPage from './components/ContactPage'
 import Health from './components/Health'
+import Status from './components/Status'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -22,6 +23,7 @@ function App() {
         <Route path="/about" element={<AboutPage />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/health" element={<Health />} />
+        <Route path="/status" element={<Status />} /> 
       </Routes>
     </div>
   )

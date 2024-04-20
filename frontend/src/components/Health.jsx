@@ -24,11 +24,9 @@ function Health() {
       <br />
       <br />
       <br />
-      <br />
-      <br />
 
-      <p>Number of Available workers: {numWorkers}</p>
-      <p>Number of Active workers: {numWorkers}</p>
+
+      <p className='p-'>Number of Available workers: {numWorkers}</p>
     </div>
   );
 }

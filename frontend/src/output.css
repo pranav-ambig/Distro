@@ -566,6 +566,10 @@ video {
   top: 0px;
 }
 
+.m-80 {
+  margin: 20rem;
+}
+
 .mx-10 {
   margin-left: 2.5rem;
   margin-right: 2.5rem;
@@ -593,6 +597,22 @@ video {
 
 .mt-4 {
   margin-top: 1rem;
+}
+
+.mb-80 {
+  margin-bottom: 20rem;
+}
+
+.mt-80 {
+  margin-top: 20rem;
+}
+
+.mt-0 {
+  margin-top: 0px;
+}
+
+.mb-0 {
+  margin-bottom: 0px;
 }
 
 .flex {
@@ -652,6 +672,26 @@ video {
 
 .p-4 {
   padding: 1rem;
+}
+
+.p-10 {
+  padding: 2.5rem;
+}
+
+.p-7 {
+  padding: 1.75rem;
+}
+
+.p-5 {
+  padding: 1.25rem;
+}
+
+.p-6 {
+  padding: 1.5rem;
+}
+
+.text-center {
+  text-align: center;
 }
 
 .font-mono {
