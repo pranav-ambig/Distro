@@ -43,8 +43,6 @@ def create_worker_instance():
 
     # Run the docker command
     subprocess.run(["docker", "run" , "-e", f"worker_key={key}", "worker1"])
-    time.sleep(10)
-    subprocess.run(["docker", "cp" , "worker1:/Contents/checkpoint.json" , "."])
 
 global key  
   
