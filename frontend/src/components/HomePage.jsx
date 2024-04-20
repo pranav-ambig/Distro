@@ -15,7 +15,7 @@ function HomePage() {
     formData.append('file', selectedFile);
 
     try {
-      const response = await axios.post('http://172.18.0.1:5000/upload-zip', formData);
+      const response = await axios.post('http://10.20.200.150:5000/upload-zip', formData);
       toast.success('File uploaded successfully');
     } catch (error) {
       toast.error('File upload failed');

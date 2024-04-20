@@ -17,7 +17,7 @@ import socketio
 
 sio = socketio.Client()
 
-sio.connect('http://172.18.0.1:5000')
+sio.connect('http://10.20.200.150:5000')
 
 import pickle
 
@@ -52,7 +52,7 @@ def make_checkpoint(epno ,model):
     with open(file_path, 'wb') as f:
         pickle.dump(state_dict, f)
 
-    requests.post('http://172.18.0.1:5000/post-pickle', files={'file': open(file_path, 'rb')})
+    requests.post('http://10.20.200.150:5000/post-pickle', files={'file': open(file_path, 'rb')})
     
     sio.emit("checkpoint" , { "Completed epochs": epno })
     

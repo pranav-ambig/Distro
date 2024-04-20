@@ -8,7 +8,7 @@
 //   useEffect(() => {
 //     const getStatus = async () => {
 //       try {
-//         const response = await axios.get('http://172.16.129.26:5000/status');
+//         const response = await axios.get('http://10.20.200.150:5000/status');
 //         console.log(`Accuracy: ${response.data.Accuracy}, Loss: ${response.data.Loss}`);
 //         setData(prevData => ({
 //           labels: [...prevData.labels, new Date().toLocaleTimeString()],

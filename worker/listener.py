@@ -37,7 +37,7 @@ import requests
 
 def downloadData(token):
     print(token)
-    respdata = requests.get(f"http://172.18.0.1:5000/download/{token}").content
+    respdata = requests.get(f"http://10.20.200.150:5000/download/{token}").content
     # print(respdata)
     with open('worker.zip', 'wb') as f:
         f.write(respdata)
@@ -71,7 +71,7 @@ def on_message(token):
     # spin_up()
 
 
-sio.connect('http://172.18.0.1:5000')
+sio.connect('http://10.20.200.150:5000')
 sio.wait()
 
 # # spawn function calls here
